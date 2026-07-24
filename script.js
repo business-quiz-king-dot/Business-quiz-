@@ -1,146 +1,137 @@
 const questions = [
     {
-        question: "GST નું Full Form શું છે?",
-        options: [
-            "Goods Service Tax",
-            "Goods and Services Tax",
-            "General Sales Tax",
-            "Global Service Tax"
-        ],
-        answer: 1
+        question: "Who is known as the Father of Economics?",
+        answers: ["Adam Smith", "Bill Gates", "Elon Musk", "Henry Ford"],
+        correct: 0
     },
-
     {
-        question: "Tata Group ના સ્થાપક કોણ હતા?",
-        options: [
-            "Ratan Tata",
-            "Jamshedji Tata",
-            "Mukesh Ambani",
-            "Dhirubhai Ambani"
-        ],
-        answer: 1
+        question: "Which company owns Google?",
+        answers: ["Microsoft", "Apple", "Alphabet", "Amazon"],
+        correct: 2
     },
-
     {
-        question: "Marketing ના 4P માં કયું નથી?",
-        options: [
-            "Product",
-            "Price",
-            "People",
-            "Promotion"
+        question: "What does CEO stand for?",
+        answers: [
+            "Chief Executive Officer",
+            "Central Economic Office",
+            "Company Expert Officer",
+            "Chief Education Officer"
         ],
-        answer: 2
+        correct: 0
     },
-
     {
-        question: "CA નું Full Form શું છે?",
-        options: [
-            "Company Analyst",
-            "Chartered Accountant",
-            "Cash Accountant",
-            "Certified Agent"
+        question: "Which is the largest e-commerce company?",
+        answers: ["Amazon", "Tesla", "Nike", "Samsung"],
+        correct: 0
+    },
+    {
+        question: "Who founded Microsoft?",
+        answers: ["Steve Jobs", "Bill Gates", "Jeff Bezos", "Mark Zuckerberg"],
+        correct: 1
+    },
+    {
+        question: "What is GDP?",
+        answers: [
+            "Gross Domestic Product",
+            "Global Development Plan",
+            "General Data Process",
+            "Growth Data Price"
         ],
-        answer: 1
+        correct: 0
+    },
+    {
+        question: "Which company makes iPhone?",
+        answers: ["Google", "Apple", "Sony", "Dell"],
+        correct: 1
+    },
+    {
+        question: "Who founded Tesla?",
+        answers: ["Elon Musk", "Bill Gates", "Larry Page", "Jack Ma"],
+        correct: 0
+    },
+    {
+        question: "Full form of MBA?",
+        answers: [
+            "Master of Business Administration",
+            "Modern Business Account",
+            "Management Basic Award",
+            "Market Business Analysis"
+        ],
+        correct: 0
+    },
+    {
+        question: "Which country has the largest economy?",
+        answers: ["India", "USA", "Japan", "Germany"],
+        correct: 1
     }
 ];
 
 
 let currentQuestion = 0;
 let score = 0;
-let timer;
-let timeLeft = 8;
 
+const questionBox = document.getElementById("question");
+const answerBox = document.getElementById("answers");
+const nextBtn = document.getElementById("next");
 
 function startQuiz(){
-
-    document.getElementById("home").classList.add("hide");
-    document.getElementById("quiz").classList.remove("hide");
-
+    currentQuestion = 0;
+    score = 0;
     showQuestion();
 }
 
-
 function showQuestion(){
-
-    clearInterval(timer);
 
     let q = questions[currentQuestion];
 
-    document.getElementById("question").innerHTML = q.question;
+    questionBox.innerHTML = 
+    `${currentQuestion + 1}. ${q.question}`;
 
-    let options = document.getElementById("options");
-    options.innerHTML = "";
+    answerBox.innerHTML = "";
 
-    q.options.forEach((option,index)=>{
+    q.answers.forEach((answer,index)=>{
 
-        let btn = document.createElement("div");
+        let button = document.createElement("button");
 
-        btn.className = "option";
-        btn.innerHTML = option;
+        button.innerHTML = answer;
 
-        btn.onclick = function(){
+        button.onclick = function(){
 
-            if(index === q.answer){
+            if(index === q.correct){
                 score++;
+                button.style.background="green";
+            }
+            else{
+                button.style.background="red";
             }
 
-            nextQuestion();
+            Array.from(answerBox.children).forEach(btn=>{
+                btn.disabled=true;
+            });
         };
 
-        options.appendChild(btn);
+        answerBox.appendChild(button);
 
     });
-
-
-    timeLeft = 8;
-    document.getElementById("timer").innerHTML = timeLeft;
-
-
-    timer = setInterval(()=>{
-
-        timeLeft--;
-
-        document.getElementById("timer").innerHTML = timeLeft;
-
-
-        if(timeLeft <= 0){
-            nextQuestion();
-        }
-
-    },1000);
-
 }
 
 
-
-function nextQuestion(){
-
-    clearInterval(timer);
+nextBtn.onclick=function(){
 
     currentQuestion++;
 
     if(currentQuestion < questions.length){
-
         showQuestion();
-
     }
     else{
+        questionBox.innerHTML =
+        `Quiz Completed 🎉<br>Your Score: ${score}/${questions.length}`;
 
-        showResult();
-
+        answerBox.innerHTML="";
+        nextBtn.style.display="none";
     }
 
-}
+};
 
 
-
-function showResult(){
-
-    document.getElementById("quiz").classList.add("hide");
-
-    document.getElementById("result").classList.remove("hide");
-
-    document.getElementById("score").innerHTML =
-    "Your Score: " + score + "/" + questions.length;
-
-}
+startQuiz();
